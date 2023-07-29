@@ -1,0 +1,28 @@
+[workspace]
+members = [
+  "vinox_client",
+  "vinox_server",
+  "vinox_common",
+  "vinox_generation"
+]
+resolver = "2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[workspace.dependencies]
+hecs = { version = "0.10" }
+cfg-if = { version = "1.0" }
+log = { version = "0.4" }
+fixed-macro = "1.2.0"
+fixed = "1.23.1"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+lto = true #Change this to be per platform windows doesn't seem to like it
+
