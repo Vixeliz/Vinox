@@ -8,26 +8,14 @@ default-run = "client"
 name = "client"
 path = "src/main.rs"
 
-[lib]
-name = "client"
-path = "src/lib.rs"
-crate-type = ["cdylib", "rlib"]
 
 
 [dependencies]
 fixed.workspace = true
+renet.workspace = true
 ggez = { git = "https://github.com/vixeliz/ggez", branch = "devel" }
 ggez_atlas = { git = "https://github.com/vixeliz/ggez_atlas" }
-naia-hecs-client = { version = "0.21", features = [ "wbindgen", "transport_webrtc" ] }
 vinox_common = { path = "../vinox_common" }
 hecs = { version = "0.10" }
 log = { version = "0.4" }
 cfg-if = { version = "1.0" }
-
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-simple_logger = { version = "4.0", default-features = false, features = ["timestamps"] }
-
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-logger = { version = "0.2" }
-wasm-bindgen = { version = "0.2.84", features = [ "serde-serialize" ] }
-web-sys = { version = "0.3", features = [ 'Window' ] }

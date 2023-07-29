@@ -1,2 +1,5 @@
 mod protocol;
-pub use protocol::{protocol, Auth, Marker, Name, Position};
+
+pub mod prelude {
+    pub use crate::protocol::Position;
+}

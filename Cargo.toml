@@ -17,6 +17,9 @@ fixed-macro = "1.2.0"
 fixed = { version = "1.23.1", features = ["serde", "std"] }
 derive_more = "0.99.17"
 serde = "1.0.152"
+renet = "0.0.13"
+glam = { version = "0.24", features = ["mint"] }
+mint = { version = "0.5.9", features = ["serde"] }
 
 [profile.dev]
 opt-level = 1
