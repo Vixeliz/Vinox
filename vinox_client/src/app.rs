@@ -64,8 +64,8 @@ impl ggez::event::EventHandler for App {
             canvas.draw(
                 &white_image,
                 DrawParam::new().dest(mint::Point2::<f32> {
-                    x: *position.x.deref() as f32,
-                    y: *position.y.deref() as f32,
+                    x: position.x.deref().0.to_num::<f32>(),
+                    y: position.y.deref().0.to_num::<f32>(),
                 }),
             )
         }

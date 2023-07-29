@@ -14,7 +14,9 @@ hecs = { version = "0.10" }
 cfg-if = { version = "1.0" }
 log = { version = "0.4" }
 fixed-macro = "1.2.0"
-fixed = "1.23.1"
+fixed = { version = "1.23.1", features = ["serde", "std"] }
+derive_more = "0.99.17"
+serde = "1.0.152"
 
 [profile.dev]
 opt-level = 1

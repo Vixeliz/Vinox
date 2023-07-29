@@ -15,6 +15,7 @@ crate-type = ["cdylib", "rlib"]
 
 
 [dependencies]
+fixed.workspace = true
 ggez = { git = "https://github.com/vixeliz/ggez", branch = "devel" }
 ggez_atlas = { git = "https://github.com/vixeliz/ggez_atlas" }
 naia-hecs-client = { version = "0.21", features = [ "wbindgen", "transport_webrtc" ] }

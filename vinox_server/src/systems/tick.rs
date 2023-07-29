@@ -1,6 +1,5 @@
+use fixed_macro::fixed;
 use hecs::Entity;
-
-use naia_hecs_server::Random;
 
 use vinox_common::{Marker, Name, Position};
 
@@ -16,26 +15,9 @@ pub fn march_and_mark(app: &mut App) {
     let mut entities_to_delete: Vec<Entity> = Vec::new();
     let mut entities_to_respawn: Vec<Entity> = Vec::new();
 
-    for (entity, position) in app.world.query_mut::<&mut Position>() {
-        *position.x += 1;
-
-        if *position.x == 100 {
-            entities_to_add.push(entity);
-        }
-        if *position.x == 150 {
-            entities_to_remove.push(entity);
-        }
-        if *position.x > 250 {
-            *position.x = 0;
-            if *position.y == 3 {
-                entities_to_delete.push(entity);
-            }
-            *position.y += 1;
-        }
-
-        if Random::gen_range_u32(0, 200) < 2 {
-            entities_to_respawn.push(entity);
-        }
+    for (_, position) in app.world.query_mut::<&mut Position>() {
+        **position.x += fixed!(0.5 : I60F4);
+        **position.y += fixed!(0.5 : I60F4);
     }
 
     // add markers
@@ -97,6 +79,7 @@ pub fn march_and_mark(app: &mut App) {
     }
 }
 
+// Scope is basically whether certain entities should be given to a given user.
 pub fn check_scopes(app: &mut App) {
     // Update scopes of entities
     let server = &mut app.server;
@@ -106,7 +89,7 @@ pub fn check_scopes(app: &mut App) {
             if let Some(position) = entity_ref.get::<&Position>() {
                 let x = *position.x;
 
-                if (50..=200).contains(&x) {
+                if (50..=200).contains(&x.round()) {
                     server.user_scope(&user_key).include(&entity);
                 } else {
                     server.user_scope(&user_key).exclude(&entity);

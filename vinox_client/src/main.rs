@@ -21,7 +21,7 @@ cfg_if! {
                 .init()
                 .expect("A logger was already initialized");
 
-            let cb = ggez::ContextBuilder::new("super_simple", "ggez");
+            let cb = ggez::ContextBuilder::new("Vinox", "Vixeliz");
             let (mut ctx, event_loop) = cb.build()?;
             let state = App::new(&mut ctx)?;
             event::run(ctx, event_loop, state)
