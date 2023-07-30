@@ -16,6 +16,10 @@ impl VinoxClient {
         // Do non renderer specific rendering things here ie build chunk meshes, entity meshes/models, etc
     }
 
+    pub fn ui(&mut self) {
+        // Ui is a seperate function since render will only be used for things in a 3d environment
+    }
+
     pub fn tick(&mut self) {
         // Fixed tick update function should be 30ticks per second
     }

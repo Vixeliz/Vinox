@@ -20,6 +20,7 @@ serde = "1.0.152"
 renet = "0.0.13"
 glam = { version = "0.24", features = ["mint"] }
 mint = { version = "0.5.9", features = ["serde"] }
+assets_manager = { version = "0.10.2", features = ["hot-reloading", "embedded", "wav", "png", "toml", "ron", "bincode"] }
 
 [profile.dev]
 opt-level = 1

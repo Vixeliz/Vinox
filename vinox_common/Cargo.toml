@@ -14,3 +14,5 @@ mint.workspace = true
 glam.workspace = true
 cfg-if = { version = "1.0" }
 log = { version = "0.4" }
+# In common cause server and client shouldn't deal with sqlite itself at all. Most of the time the server is the only one using sqlite
+rusqlite = { version = "0.29.0", features = ["bundled"] } 

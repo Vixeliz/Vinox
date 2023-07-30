@@ -8,11 +8,10 @@ default-run = "client"
 name = "client"
 path = "src/main.rs"
 
-
-
 [dependencies]
 fixed.workspace = true
 renet.workspace = true
+glam.workspace = true
 ggez = { git = "https://github.com/vixeliz/ggez", branch = "devel" }
 ggez_atlas = { git = "https://github.com/vixeliz/ggez_atlas" }
 vinox_common = { path = "../vinox_common" }
