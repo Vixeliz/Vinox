@@ -21,8 +21,14 @@ impl GgezState {
 }
 
 impl event::EventHandler for GgezState {
+    fn quit_event(&mut self, ctx: &mut Context) -> Result<bool, GameError> {
+        self.game.exit();
+        self.game.update(ctx.time.delta());
+        Ok(false)
+    }
+
     fn update(&mut self, ctx: &mut Context) -> GameResult {
-        self.game.update(ctx.time.delta().as_secs_f32());
+        self.game.update(ctx.time.delta());
         self.game.input(&self.input);
         while ctx.time.check_update_time(30) {
             self.game.tick();

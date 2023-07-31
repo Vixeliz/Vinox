@@ -1,14 +1,20 @@
-use crate::input::InputState;
+use crate::{input::InputState, network::state::NetworkState};
+use std::time::Duration;
 
-pub struct VinoxClient {}
+pub struct VinoxClient {
+    network: NetworkState,
+}
 
 impl VinoxClient {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            network: NetworkState::new("127.0.0.1:56552".to_string()).unwrap(),
+        }
     }
 
-    pub fn update(&mut self, dt: f32) {
+    pub fn update(&mut self, duration: Duration) {
         // Uncapped or vsync frame rate
+        self.network.update(duration);
     }
 
     // Maybe return a vec of items that implement a trait? Ie something similiar to ggez drawable
@@ -26,5 +32,9 @@ impl VinoxClient {
 
     pub fn input(&mut self, input: &InputState) {
         // Provide input state that is needed to vinox
+    }
+
+    pub fn exit(&mut self) {
+        self.network.exit();
     }
 }
