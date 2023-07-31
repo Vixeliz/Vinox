@@ -22,8 +22,14 @@ impl VinoxClient {
         // Do non renderer specific rendering things here ie build chunk meshes, entity meshes/models, etc
     }
 
-    pub fn ui(&mut self) {
+    pub fn ui(&mut self, gui: &mut egui::Context) {
         // Ui is a seperate function since render will only be used for things in a 3d environment
+        egui::Window::new("Title").show(gui, |ui| {
+            ui.label("label");
+            if ui.button("button").clicked() {
+                println!("button clicked");
+            }
+        });
     }
 
     pub fn tick(&mut self) {

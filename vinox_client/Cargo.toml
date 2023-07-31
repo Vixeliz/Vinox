@@ -13,8 +13,10 @@ fixed.workspace = true
 renet.workspace = true
 glam.workspace = true
 ggez = { git = "https://github.com/vixeliz/ggez", branch = "devel" }
+ggegui = { git = "https://github.com/vixeliz/ggegui" }
 ggez_atlas = { git = "https://github.com/vixeliz/ggez_atlas" }
 vinox_common = { path = "../vinox_common" }
 hecs = { version = "0.10" }
 log = { version = "0.4" }
 cfg-if = { version = "1.0" }
+egui = "0.22.0"

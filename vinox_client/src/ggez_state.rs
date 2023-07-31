@@ -1,4 +1,7 @@
+use std::ops::Deref;
+
 use crate::glam::{Vec2, Vec3};
+use ggegui::Gui;
 use ggez::{
     graphics::{DrawParam, DrawParam3d, Mesh3dBuilder},
     *,
@@ -9,13 +12,15 @@ use crate::{game::VinoxClient, input::InputState};
 pub struct GgezState {
     game: VinoxClient,
     input: InputState,
+    gui: Gui,
 }
 
 impl GgezState {
-    pub fn new(_ctx: &mut Context) -> GameResult<GgezState> {
+    pub fn new(ctx: &mut Context) -> GameResult<GgezState> {
         Ok(GgezState {
             game: VinoxClient::new(),
             input: InputState::default(),
+            gui: Gui::new(ctx),
         })
     }
 }
@@ -33,6 +38,8 @@ impl event::EventHandler for GgezState {
         while ctx.time.check_update_time(30) {
             self.game.tick();
         }
+        self.game.ui(&mut self.gui.ctx().context);
+        self.gui.update(ctx);
 
         Ok(())
     }
@@ -65,7 +72,6 @@ impl event::EventHandler for GgezState {
 
         canvas3d.finish(ctx)?;
 
-        self.game.ui();
         let mut canvas = graphics::Canvas::from_frame(ctx, graphics::Color::BLACK);
         let params = DrawParam::default()
             .dest(Vec2::new(0.0, 0.0))
@@ -75,6 +81,8 @@ impl event::EventHandler for GgezState {
             ));
 
         canvas.draw(&scene_image, params);
+
+        canvas.draw(&self.gui, DrawParam::default().dest(glam::Vec2::ZERO));
 
         canvas.finish(ctx)?;
 
