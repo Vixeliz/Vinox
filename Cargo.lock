@@ -308,6 +308,12 @@ dependencies = [
 
 [[package]]
 name = "base64"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
+
+[[package]]
+name = "base64"
 version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "604178f6c5c21f02dc555784810edfb88d34ac2c73b2eae109655649ee73ce3d"
@@ -1263,7 +1269,7 @@ version = "0.9.3"
 source = "git+https://github.com/vixeliz/ggez?branch=devel#cea4a95d09eb8daa8216858419bbe08406e3ba5b"
 dependencies = [
  "approx",
- "base64",
+ "base64 0.21.2",
  "bitflags 2.3.3",
  "bytemuck",
  "crevice",
@@ -1391,9 +1397,12 @@ version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4fe8d5192923fbd783c15e74627de8e27c97e1e3dec22bf54515a407249febf"
 dependencies = [
+ "base64 0.13.1",
  "byteorder",
  "gltf-json",
+ "image",
  "lazy_static",
+ "urlencoding",
 ]
 
 [[package]]
@@ -2770,6 +2779,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "ron"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "300a51053b1cb55c80b7a9fde4120726ddf25ca241a1cbb926626f62fb136bff"
+dependencies = [
+ "base64 0.13.1",
+ "bitflags 1.3.2",
+ "serde",
+]
+
+[[package]]
 name = "rusqlite"
 version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3383,6 +3403,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "urlencoding"
+version = "2.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8db7427f936968176eaa7cdf81b7f98b980b18495ec28f1b5791ac3bfe3eea9"
+
+[[package]]
 name = "uuid"
 version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3410,6 +3436,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 name = "vinox_client"
 version = "0.1.0"
 dependencies = [
+ "base64 0.21.2",
  "cfg-if",
  "egui",
  "fixed",
@@ -3417,8 +3444,11 @@ dependencies = [
  "ggez",
  "ggez_atlas",
  "glam",
+ "gltf",
  "hecs",
+ "image",
  "log",
+ "percent-encoding",
  "renet",
  "vinox_common",
 ]
@@ -3435,6 +3465,15 @@ dependencies = [
  "mint",
  "renet",
  "rusqlite",
+ "serde",
+]
+
+[[package]]
+name = "vinox_formats"
+version = "0.1.0"
+dependencies = [
+ "glam",
+ "ron",
  "serde",
 ]
 

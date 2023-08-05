@@ -7,6 +7,8 @@ mod game;
 mod ggez_state;
 mod input;
 mod network;
+mod render;
+mod ui;
 
 fn main() -> GameResult {
     let resource_dir = if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {

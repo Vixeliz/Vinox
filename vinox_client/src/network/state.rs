@@ -39,10 +39,11 @@ impl NetworkState {
         None
     }
 
-    pub fn update(&mut self, duration: Duration) {
+    pub fn update(&mut self, duration: Duration) -> Result<(), Box<dyn std::error::Error>> {
         // Uncapped or vsync frame rate
         self.client.update(duration);
-        self.transport.update(duration, &mut self.client).unwrap();
+        self.transport.update(duration, &mut self.client)?;
+        Ok(())
     }
 
     pub fn exit(&mut self) {

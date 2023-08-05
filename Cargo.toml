@@ -3,7 +3,8 @@ members = [
   "vinox_client",
   "vinox_server",
   "vinox_common",
-  "vinox_generation"
+  "vinox_generation",
+  "vinox_formats"
 ]
 resolver = "2"
 
@@ -21,6 +22,8 @@ renet = "0.0.13"
 glam = { version = "0.24", features = ["mint"] }
 mint = { version = "0.5.9", features = ["serde"] }
 assets_manager = { version = "0.10.2", features = ["hot-reloading", "embedded", "wav", "png", "toml", "ron", "bincode"] }
+ron = "0.8.0"
+bincode = "1.3.3"
 
 [profile.dev]
 opt-level = 1
