@@ -13,10 +13,10 @@ mod ui;
 fn main() -> GameResult {
     let resource_dir = if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {
         let mut path = path::PathBuf::from(manifest_dir);
-        path.push("resources");
+        path.push("assets");
         path
     } else {
-        path::PathBuf::from("./resources")
+        path::PathBuf::from("./assets")
     };
 
     let cb = ContextBuilder::new("vinox", "vixeliz")

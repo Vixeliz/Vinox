@@ -1,30 +1,34 @@
+use std::marker::PhantomData;
+
 use glam::*;
 use image::ImageBuffer;
 
 use super::model::Model;
 
-pub trait ConvertModel {
-    fn to_mesh(model: Model) -> Self;
+pub trait ConvertModel<S> {
+    fn to_mesh(model: Model, state: &mut S) -> Self;
 }
 
 #[derive(Debug)]
-pub struct AssetRegistry<M: ConvertModel> {
+pub struct AssetRegistry<S, M: ConvertModel<S>> {
     pub models: Vec<M>,
     pub block_atlas: Option<ImageBuffer<image::Rgba<u8>, Vec<u8>>>, // Animated voxels will be done by passing in a framecount and time value to the shader to offset the uvs. This means all animations are the same speed could pass a speed attribute as well
     pub entity_atlas: Option<ImageBuffer<image::Rgba<u8>, Vec<u8>>>,
+    _phantom_data: PhantomData<S>,
 }
 
-impl<M: ConvertModel> Default for AssetRegistry<M> {
+impl<S, M: ConvertModel<S>> Default for AssetRegistry<S, M> {
     fn default() -> Self {
         Self {
             models: Vec::with_capacity(100),
             block_atlas: None,
             entity_atlas: None,
+            _phantom_data: PhantomData::default(),
         }
     }
 }
 
-impl<M: ConvertModel> AssetRegistry<M> {}
+impl<S, M: ConvertModel<S>> AssetRegistry<S, M> {}
 
 #[derive(Default, Debug)]
 pub struct Draw {
@@ -32,24 +36,26 @@ pub struct Draw {
 }
 
 #[derive(Debug)]
-pub struct RenderState<M: ConvertModel> {
+pub struct RenderState<S, M: ConvertModel<S>> {
     pub camera: Camera,
     pub draws: Vec<Draw>,
-    pub asset_registry: AssetRegistry<M>,
+    pub asset_registry: AssetRegistry<S, M>,
 }
 
-impl<M: ConvertModel> Default for RenderState<M> {
+impl<S, M: ConvertModel<S>> Default for RenderState<S, M> {
     fn default() -> Self {
         Self {
             camera: Camera::default(),
-            draws: Vec::with_capacity(100),
+            draws: Vec::default(),
             asset_registry: AssetRegistry::default(),
         }
     }
 }
 
-impl<M: ConvertModel> RenderState<M> {
-    pub fn clear(&mut self) {}
+impl<S, M: ConvertModel<S>> RenderState<S, M> {
+    pub fn clear(&mut self) {
+        self.draws.clear();
+    }
 }
 
 /// Camera3d bundle that holds both the `Projection` and `Camera`
@@ -72,7 +78,7 @@ pub struct Camera {
 impl Default for Camera {
     fn default() -> Self {
         Self {
-            position: Vec3::ZERO,
+            position: Vec3::new(0.0, 0.0, 0.0),
             rotation: Quat::IDENTITY,
             aspect: 0.0,
             fovy: 70.0,

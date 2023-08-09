@@ -124,6 +124,7 @@ pub struct Mesh {
     pub vertices: Vec<Vertex>,
     pub indices: Vec<u32>,
     pub aabb: Option<Aabb>,
+    // pub transform: Transform,
 }
 
 /// These models are for entities
@@ -134,7 +135,11 @@ pub struct Model {
     pub meshes: Vec<Mesh>,
     /// The bounding box of the model
     pub aabb: Option<Aabb>,
+    pub animations: Vec<Animation>,
 }
+
+#[derive(Debug, Default)]
+pub struct Animation {}
 
 // impl std::hash::Hash for Model {
 //     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
@@ -337,7 +342,11 @@ impl Model {
                 Model::read_node(&mut meshes, &node, Mat4::IDENTITY, &mut buffer_data)?;
             }
         }
-        let mut model = Model { meshes, aabb: None };
+        let mut model = Model {
+            meshes,
+            aabb: None,
+            animations: vec![],
+        };
         model.calculate_aabb();
 
         Ok(model)

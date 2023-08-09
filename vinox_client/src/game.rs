@@ -1,32 +1,49 @@
+use glam::Quat;
+
 use crate::{
     input::InputState,
     network::state::NetworkState,
-    render::state::{ConvertModel, RenderState},
+    render::{
+        model::Model,
+        state::{ConvertModel, RenderState},
+    },
 };
-use std::time::Duration;
+use std::{marker::PhantomData, path::Path, time::Duration};
 
-pub struct VinoxClient<M: ConvertModel> {
+pub struct VinoxClient<S, M: ConvertModel<S>> {
     network: NetworkState,
-    render: RenderState<M>,
+    render: RenderState<S, M>,
+    _phantom: PhantomData<S>,
 }
 
-impl<M: ConvertModel> VinoxClient<M> {
-    pub fn new() -> Self {
+impl<S, M: ConvertModel<S>> VinoxClient<S, M> {
+    pub fn new(state: &mut S) -> Self {
+        let mut render = RenderState::<S, M>::default();
+        render.asset_registry.models.push(M::to_mesh(
+            Model::from_gltf(Path::new("vinox_client/assets/player.glb")).unwrap(),
+            state,
+        ));
         Self {
             network: NetworkState::new("127.0.0.1:56552".to_string()).unwrap(),
-            render: RenderState::default(),
+            render,
+            _phantom: PhantomData::default(),
         }
     }
 
     pub fn update(&mut self, duration: Duration) {
         // Uncapped or vsync frame rate
         self.network.update(duration).ok();
-        self.render.camera.position = [-5.0, 0.0, 2.5].into();
+        self.render.camera.position = [0.0, 0.0, -5.0].into();
+        self.render.camera.rotation = Quat::from_rotation_x(90.0_f32.to_radians());
+        // self.render.camera.rotation = Quat::from_euler(EulerRot)
     }
 
     // Maybe return a vec of items that implement a trait? Ie something similiar to ggez drawable
-    pub fn render(&mut self) -> &mut RenderState<M> {
+    pub fn render(&mut self) -> &mut RenderState<S, M> {
         // Do non renderer specific rendering things here ie build chunk meshes, entity meshes/models, etc
+        self.render
+            .draws
+            .push(crate::render::state::Draw { model_id: 0 });
         &mut self.render
     }
 
