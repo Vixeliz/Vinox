@@ -8,6 +8,7 @@ mod ggez_state;
 mod input;
 mod network;
 mod render;
+mod state;
 mod ui;
 
 fn main() -> GameResult {

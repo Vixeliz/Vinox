@@ -97,18 +97,30 @@ impl GgezState {
 
 impl event::EventHandler for GgezState {
     fn quit_event(&mut self, ctx: &mut Context) -> Result<bool, GameError> {
-        self.game.exit();
-        self.game.update(ctx.time.delta());
+        self.game
+            .exit()
+            .map_err(|x| GameError::CustomError(x.to_string()))?;
+        self.game
+            .update(ctx.time.delta())
+            .map_err(|x| GameError::CustomError(x.to_string()))?;
         Ok(false)
     }
 
     fn update(&mut self, ctx: &mut Context) -> GameResult {
-        self.game.update(ctx.time.delta());
-        self.game.input(&self.input);
+        self.game
+            .update(ctx.time.delta())
+            .map_err(|x| GameError::CustomError(x.to_string()))?;
+        self.game
+            .input(&self.input)
+            .map_err(|x| GameError::CustomError(x.to_string()))?;
         while ctx.time.check_update_time(30) {
-            self.game.tick();
+            self.game
+                .tick()
+                .map_err(|x| GameError::CustomError(x.to_string()))?;
         }
-        self.game.ui(&mut self.gui.ctx().context);
+        self.game
+            .ui(&mut self.gui.ctx().context)
+            .map_err(|x| GameError::CustomError(x.to_string()))?;
         self.gui.update(ctx);
         self.gui.input.set_scale_factor(1.5, ctx.gfx.size());
 
@@ -116,7 +128,11 @@ impl event::EventHandler for GgezState {
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
-        let render_state = self.game.render();
+        let render_state = self
+            .game
+            .render()
+            .map_err(|x| GameError::CustomError(x.to_string()))?;
+
         let (width, height) = ctx.gfx.drawable_size();
         let mut scene_image =
             graphics::ScreenImage::new(ctx, ggez::graphics::ImageFormat::Rgba8Unorm, 1.0, 1.0, 1);

@@ -34,4 +34,5 @@ image = { version = "0.24", default-features = false, features = [
 ] }
 base64 = { version = "0.21.2" }
 percent-encoding = { version = "2.3.0" }
+miniquad = "0.3.16"
 

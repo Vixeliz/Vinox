@@ -7,13 +7,14 @@ use crate::{
         model::Model,
         state::{ConvertModel, RenderState},
     },
+    state::GameState,
 };
-use std::{marker::PhantomData, path::Path, time::Duration};
+use std::{path::Path, time::Duration};
 
 pub struct VinoxClient<S, M: ConvertModel<S>> {
     network: NetworkState,
     render: RenderState<S, M>,
-    _phantom: PhantomData<S>,
+    game: GameState<S, M>,
 }
 
 impl<S, M: ConvertModel<S>> VinoxClient<S, M> {
@@ -26,46 +27,51 @@ impl<S, M: ConvertModel<S>> VinoxClient<S, M> {
         Self {
             network: NetworkState::new("127.0.0.1:56552".to_string()).unwrap(),
             render,
-            _phantom: PhantomData::default(),
+            game: GameState::new(),
         }
     }
 
-    pub fn update(&mut self, duration: Duration) {
+    pub fn update(&mut self, duration: Duration) -> Result<(), String> {
         // Uncapped or vsync frame rate
         self.network.update(duration).ok();
         self.render.camera.position = [0.0, 0.0, -5.0].into();
         self.render.camera.rotation = Quat::from_rotation_x(90.0_f32.to_radians());
+        self.game.update(duration)?;
+        Ok(())
         // self.render.camera.rotation = Quat::from_euler(EulerRot)
     }
 
     // Maybe return a vec of items that implement a trait? Ie something similiar to ggez drawable
-    pub fn render(&mut self) -> &mut RenderState<S, M> {
+    pub fn render(&mut self) -> Result<&mut RenderState<S, M>, String> {
         // Do non renderer specific rendering things here ie build chunk meshes, entity meshes/models, etc
+        self.game.render(&mut self.render)?;
         self.render
             .draws
             .push(crate::render::state::Draw { model_id: 0 });
-        &mut self.render
+        Ok(&mut self.render)
     }
 
-    pub fn ui(&mut self, gui: &mut egui::Context) {
+    pub fn ui(&mut self, gui: &mut egui::Context) -> Result<(), String> {
         // Ui is a seperate function since render will only be used for things in a 3d environment
-        egui::SidePanel::new(egui::panel::Side::Left, "Title").show(gui, |ui| {
-            ui.label("label");
-            if ui.button("button").clicked() {
-                println!("button clicked");
-            }
-        });
+        self.game.ui(gui)?;
+        Ok(())
     }
 
-    pub fn tick(&mut self) {
+    pub fn tick(&mut self) -> Result<(), String> {
+        self.game.tick()?;
+        Ok(())
         // Fixed tick update function should be 30ticks per second
     }
 
-    pub fn input(&mut self, input: &InputState) {
+    pub fn input(&mut self, input: &InputState) -> Result<(), String> {
+        self.game.input(input)?;
         // Provide input state that is needed to vinox
+        Ok(())
     }
 
-    pub fn exit(&mut self) {
+    pub fn exit(&mut self) -> Result<(), String> {
+        self.game.exit()?;
         self.network.exit();
+        Ok(())
     }
 }
