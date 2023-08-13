@@ -3,12 +3,13 @@ use std::{env, path};
 use ggez::*;
 use ggez_state::GgezState;
 
+mod commands;
 mod game;
 mod ggez_state;
 mod input;
 mod network;
 mod render;
-mod state;
+mod scene;
 mod ui;
 
 fn main() -> GameResult {
